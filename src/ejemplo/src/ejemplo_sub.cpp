@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <std_msgs/Int32.h>
+#include <std_msgs/String.h>
 
 #define RATE_HZ 2
 
@@ -11,6 +12,21 @@ int num = -1;
 void get_msg(const std_msgs::Int32& msg) {
 	num = msg.data;
 	ROS_INFO_STREAM("Valor recibido: " << num);
+
+	ros::Publisher pub = nh.advertise<std_msgs::String> ("/msg_ejemplo", 1);
+
+	std_msgs::String res;
+	string s;
+		
+	while (ros::ok())
+	{
+		cout << "Introduce un numero entero:" << endl;
+		cin >> num;
+
+		msg.data = num;
+		pub.publish(msg);
+	}
+
 }
 
 int main(int argc, char **argv)

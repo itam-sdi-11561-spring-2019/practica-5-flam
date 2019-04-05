@@ -2,8 +2,14 @@
 
 #include <iostream>
 #include <std_msgs/Int32.h>
+#include <std_msgs/String.h>
 
 using namespace std;
+
+void get_msg(const std_msgs::String& msg) {
+	num = msg.data;
+	ROS_INFO_STREAM("Respuesta de Sub: " << num);
+}
 
 int main(int argc, char **argv)
 {
