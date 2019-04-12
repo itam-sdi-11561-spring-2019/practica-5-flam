@@ -8,24 +8,18 @@
 
 using namespace std;
 int num = -1;
+ros::Publisher pub;
 
 void get_msg(const std_msgs::Int32& msg) {
 	num = msg.data;
 	ROS_INFO_STREAM("Valor recibido: " << num);
 
-	ros::Publisher pub = nh.advertise<std_msgs::String> ("/msg_ejemplo", 1);
-
 	std_msgs::String res;
-	string s;
-		
-	while (ros::ok())
-	{
-		cout << "Introduce un numero entero:" << endl;
-		cin >> num;
-
-		msg.data = num;
-		pub.publish(msg);
-	}
+	string s = "Respuesta a " + to_string(num);
+	
+	res.data = s;
+	ROS_INFO_STREAM(s);
+	pub.publish(res);
 
 }
 
@@ -35,11 +29,11 @@ int main(int argc, char **argv)
 	ros::NodeHandle nh;
 	ROS_INFO_STREAM("ejemplo_sub_node initialized");																																							
 	ROS_INFO_STREAM(ros::this_node::getName());
-
 	ros::Subscriber sub_vel = nh.subscribe("/msg_ejemplo", 1000, &get_msg);
-
 	ros::Rate rate(RATE_HZ);
-		
+	pub = nh.advertise<std_msgs::String> ("/msg_response", 1);
+
+	
 	while (ros::ok())
 	{
 

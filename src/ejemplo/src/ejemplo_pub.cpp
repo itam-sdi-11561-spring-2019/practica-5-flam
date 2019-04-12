@@ -3,12 +3,13 @@
 #include <iostream>
 #include <std_msgs/Int32.h>
 #include <std_msgs/String.h>
+#define RATE_HZ 2
 
 using namespace std;
 
 void get_msg(const std_msgs::String& msg) {
-	num = msg.data;
-	ROS_INFO_STREAM("Respuesta de Sub: " << num);
+	string m = msg.data;
+	ROS_INFO_STREAM("Respuesta de Sub: " + m);
 }
 
 int main(int argc, char **argv)
@@ -19,6 +20,9 @@ int main(int argc, char **argv)
 	ROS_INFO_STREAM(ros::this_node::getName());
 
 	ros::Publisher pub = nh.advertise<std_msgs::Int32> ("/msg_ejemplo", 1);
+	ros::Subscriber sub_vel = nh.subscribe("/msg_response", 1000, &get_msg);
+	ros::Rate rate(RATE_HZ);
+
 
 	std_msgs::Int32 msg;
 	int num; 
@@ -30,6 +34,8 @@ int main(int argc, char **argv)
 
 		msg.data = num;
 		pub.publish(msg);
+		ros::spinOnce();
+		rate.sleep();
 	}
 
     return 0;
